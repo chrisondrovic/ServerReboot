@@ -6,18 +6,29 @@ using System.Text;
 
 namespace ServerReboot.EventLogging
 {
-    /*
-        Event Log Ids
-        2000 - Mode Selection
-        2001 - RFC Checked
-        2002 - Manager Checked
-        2003 - Remote Sessions Disconnected
-        2004 - Server Verificaiton
-        2005 - Requirments Met
-        2006 - Reboot Button Clicked
-        2007 - No Button Clicked
-        2008 - Yes Button Clicled
-    */
+    /// <summary>
+    ///  Event Log IDS
+    ///
+    ///  Event Log Ids
+    ///     2000 - Mode Selection
+    ///     2001 - RFC Checked
+    ///     2002 - Manager Checked
+    ///     2003 - Peer Approval Checked
+    ///     2004 - Disconnected Remote Sessions
+    ///     2005 - Verify Server rebooting
+    ///     2006 - All Requirements Met
+    ///     2007 -
+    ///     2008 -
+    ///     2009 -
+    ///     2010 -
+    ///     2011 -
+    ///     2012 -
+    ///     2013 - Reboot Button Clicked
+    ///     2014 - Reboot No Button Clicked
+    ///     2015 - Reboot Yes Button Clicked
+    ///     
+    /// </summary>
+    
     /// <summary>
     /// 
     /// </summary>

@@ -1,0 +1,156 @@
+﻿<Window x:Class="ServerReboot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ServerReboot.UI"
+        xmlns:v="clr-namespace:ServerReboot.Validations"
+    Title="Server Reboot" ResizeMode="NoResize" WindowState="Maximized" WindowStyle="None" Icon="/ServerReboot;component/power_restart.ico">
+
+    <Window.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+        <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="2 2 2 2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Server Name" FontSize="30" FontWeight="Bold" FontFamily="Times New Roman" HorizontalAlignment="Center" Margin="2 2 2 2"/>
+        <Label Grid.Row="1" Grid.ColumnSpan="2" FontSize="45" FontWeight="Bold" Foreground="Red" FontFamily="Times New Roman" HorizontalAlignment="Center" Content="{Binding Path=ServerName}" Margin="2 2 2 2"/>
+        <GroupBox Header="Options" Grid.ColumnSpan="2" Grid.Row="2" Margin="2 2 2 2" FontFamily="Times New Roman" FontSize="18">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton x:Name="AfterHours" Content="After Hours" Margin="2 2 2 2" Checked="AfterHours_Checked" />
+                <RadioButton x:Name="CausingOutage" Content="Causing an Outage" Margin="2 2 2 2" Checked="CausingOutage_Checked" />
+                <RadioButton x:Name="NormalOperation" Content="Normal Operations" Margin="2 2 2 2" Checked="NormalOperation_Checked" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="After Hours" Margin="2 2 2 2" Grid.ColumnSpan="2" Grid.Row="3" Visibility="{Binding IsChecked, ElementName=AfterHours, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Times New Roman" FontSize="18">
+            <Grid Margin="2 2 2 2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Row="0" Grid.Column="0" x:Name="cbAHEmergencyRFC" Content="Emergency RFC"  IsEnabled="{Binding ElementName=tbAHEmergencyRFC, Path=Text.Length}" Checked="cbAHEmergencyRFC_Checked" Margin="2 2 2 2"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="tbAHEmergencyRFC" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}" Margin="2 2 2 2">
+                    <TextBox.Text>
+                        <Binding Path="RFCNumber" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <v:RFCValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <CheckBox Grid.Row="1" Grid.Column="0" x:Name="cbAHMangerApproval" Content="Manager Approval" IsEnabled="{Binding ElementName=tbAHManagerApproval, Path=Text.Length}" Checked="cbAHMangerApproval_Checked" Margin="2 2 2 2" />
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbAHManagerApproval" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}" IsEnabled="{Binding ElementName=cbAHEmergencyRFC, Path=IsChecked}" Margin="2 2 2 2" >
+                    <TextBox.Text>
+                        <Binding Path="Manager" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <v:ManagerValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <CheckBox Grid.Row="2" Grid.Column="0" x:Name="cbAHDisconnectRemoteSessions" Content="Disconnected from All Remote Sessions" IsEnabled="{Binding ElementName=cbAHMangerApproval, Path=IsChecked}" Checked="cbAHDisconnectRemoteSessions_Checked"  Margin="2 2 2 2" />
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="2 2 2 2" IsEnabled="False" Visibility="Hidden" />
+                <CheckBox Grid.Row="3" Grid.Column="0" x:Name="cbAHVerifyServer" Content="Verify Server Name you are going to reboot" IsEnabled="{Binding ElementName=cbAHDisconnectRemoteSessions, Path=IsChecked}" Checked="cbAHVerifyServer_Checked" Margin="2 2 2 2" />
+                <TextBox Grid.Row="3" Grid.Column="1" Margin="2 2 2 2" IsEnabled="False" Visibility="Hidden" />
+                <CheckBox Grid.Row="4" Grid.Column="0" x:Name="cbAHRequirementsMet" Content="All Requirements Met" IsEnabled="{Binding ElementName=cbAHVerifyServer, Path=IsChecked}" Checked="cbAHRequirementsMet_Checked" Margin="2 2 2 2"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Margin="2 2 2 2" IsEnabled="False" Visibility="Hidden" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Causing Outage" Margin="2 2 2 2" Grid.ColumnSpan="2" Grid.Row="3" Visibility="{Binding IsChecked, ElementName=CausingOutage, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Times New Roman" FontSize="18">
+            <Grid Margin="2 2 2 2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <CheckBox Grid.Row="0" Grid.Column="0" x:Name="cbCOEmergencyRFC" Content="Emergency RFC"  IsEnabled="{Binding ElementName=tbCOEmergencyRFC, Path=Text.Length}"  Margin="2 2 2 2" Checked="cbCOEmergencyRFC_Checked"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="tbCOEmergencyRFC" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}" Margin="2 2 2 2">
+                    <TextBox.Text>
+                        <Binding Path="RFCNumber" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <v:RFCValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <CheckBox Grid.Row="1" Grid.Column="0" x:Name="cbCOPeerApproval" Content="Peer Approval" IsEnabled="{Binding ElementName=tbCOPeerApproval, Path=Text.Length}"   Margin="2 2 2 2" Checked="cbCOPeerApproval_Checked" />
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbCOPeerApproval" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}" IsEnabled="{Binding ElementName=cbCOEmergencyRFC, Path=IsChecked}" Margin="2 2 2 2" >
+                    <TextBox.Text>
+                        <Binding Path="Peer" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <v:PeerValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <CheckBox Grid.Row="2" Grid.Column="0" x:Name="cbCOMangerApproval" Content="Manager Approval" IsEnabled="{Binding ElementName=tbCOManagerApproval, Path=Text.Length}"  Margin="2 2 2 2" Checked="cbCOMangerApproval_Checked" />
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="tbCOManagerApproval" Validation.ErrorTemplate="{StaticResource validationTemplate}" Style="{StaticResource textBoxInError}" IsEnabled="{Binding ElementName=cbCOEmergencyRFC, Path=IsChecked}" Margin="2 2 2 2" >
+                    <TextBox.Text>
+                        <Binding Path="Manager" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <v:ManagerValidation />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                
+                <Label Grid.Row="3" Grid.Column="0" Content="Emergency RFC Approved" Margin="2 2 2 2" />
+                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="cmbCOEmergencyRFC" IsEnabled="{Binding ElementName=cbCOMangerApproval, Path=IsChecked}" Margin="2 2 2 2" >
+                    <ComboBoxItem Tag="Yes" Content="Yes"  />
+                    <ComboBoxItem Tag="No" Content="No" />
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <Button Grid.Row="5" Grid.ColumnSpan="2" x:Name="btnExit" Content="EXIT"  FontFamily="Times New Roman" FontSize="18" Visibility="Visible" Click="btnExit_Click" Margin="2 2 2 2"/>
+        <Button Grid.Row="5" Grid.ColumnSpan="2" x:Name="btnAHReboot" Content="REBOOT"  FontFamily="Times New Roman" FontSize="18" Visibility="{Binding IsChecked, ElementName=cbAHRequirementsMet, Converter={StaticResource BooleanToVisibilityConverter}}" Click="btnAHReboot_Click" Margin="2 2 2 2" />
+        <Button Grid.Row="5" Grid.ColumnSpan="2" x:Name="btnCOReboot" Content="REBOOT" FontFamily="Times New Roman" FontSize="18" Click="btnCOReboot_Click" Margin="2 2 2 2">
+            <Button.Style>
+                <Style>
+                    <Setter Property="Button.Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=cmbCOEmergencyRFC, Path=SelectedItem.Tag}" Value="Yes">
+                            <Setter Property="Button.Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</Window>

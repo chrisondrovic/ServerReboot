@@ -12,8 +12,10 @@ namespace ServerReboot.UI
     {
         EventLogger events = new EventLogger("Server-Reboot", "Application");
         private string currentUser = Environment.UserDomainName + "\\" + Environment.UserName;
-        int NoButtonClicked = 2007;
-        int YesButtonClicked = 2008;
+
+        int elNoButton = 2014;
+        int elYesButton = 2015;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RebootConfirmation"/> class.
         /// </summary>
@@ -30,8 +32,8 @@ namespace ServerReboot.UI
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void btnYES_Click(object sender, RoutedEventArgs e)
         {
-            events.WriteToEventLog("Yes button clicked on " + DateTime.Now.ToString() + " by " + currentUser, "warn", YesButtonClicked);
-            events.WriteToEventLog("Rebooting server on " + DateTime.Now.ToString() + " by " + currentUser, "warn", YesButtonClicked);
+            events.WriteToEventLog("Yes button clicked on " + DateTime.Now.ToString() + " by " + currentUser, "warn", elYesButton);
+            events.WriteToEventLog("Rebooting server on " + DateTime.Now.ToString() + " by " + currentUser, "warn", elYesButton);
             Process.Start("Shutdown.exe", "/r");
             Application.Current.Shutdown();
         }
@@ -43,7 +45,7 @@ namespace ServerReboot.UI
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void btnNO_Click(object sender, RoutedEventArgs e)
         {
-            events.WriteToEventLog("No button clicked on " + DateTime.Now.ToString() + " by " + currentUser, "info", NoButtonClicked);
+            events.WriteToEventLog("No button clicked on " + DateTime.Now.ToString() + " by " + currentUser, "info", elNoButton);
             Application.Current.Shutdown();
         }
     }
