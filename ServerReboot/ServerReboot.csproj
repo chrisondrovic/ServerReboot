@@ -64,7 +64,8 @@
     <Compile Include="UI\RebootConfirmation.xaml.cs">
       <DependentUpon>RebootConfirmation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Validations\ManagerValidaioncs.cs" />
+    <Compile Include="Validations\ManagerValidaion.cs" />
+    <Compile Include="Validations\PeerValidation.cs" />
     <Compile Include="Validations\RFCValidation.cs" />
     <Compile Include="View\View.cs" />
     <Page Include="UI\MainWindow.xaml">

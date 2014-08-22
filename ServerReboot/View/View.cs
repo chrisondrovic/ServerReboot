@@ -15,6 +15,7 @@ namespace ServerReboot
         private string _server;
         private string _rfc;
         private string _manager;
+        private string _peer;
         /// <summary>
         /// Gets or sets the name of the server.
         /// </summary>
@@ -36,6 +37,13 @@ namespace ServerReboot
         /// The manager.
         /// </value>
         public string Manager { get { return _manager; } set { _manager = value; } }
+        /// <summary>
+        /// Gets or sets the peer.
+        /// </summary>
+        /// <value>
+        /// The peer.
+        /// </value>
+        public string Peer { get { return _peer; } set { _peer = value; } }
 
     }
 }

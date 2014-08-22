@@ -1,13 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows.Controls;
-using ServerReboot;
+
 namespace ServerReboot.Validations
 {
-    public class RFCValidation : ValidationRule
+    class PeerValidation : ValidationRule
     {
-        private string _number;
-
-        public string RFC { get { return _number; } set { _number = value; } }
+        private string _peer;
+        /// <summary>
+        /// Gets or sets the peer.
+        /// </summary>
+        /// <value>
+        /// The peer.
+        /// </value>
+        public string Peer { get { return _peer; } set { _peer = value; } }
 
         /// <summary>
         /// When overridden in a derived class, performs validation checks on a value.
@@ -19,21 +27,21 @@ namespace ServerReboot.Validations
         /// </returns>
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
-            string number = string.Empty;
+            string peer = string.Empty;
             try
             {
                 if (((string)value).Length > 0)
                 {
-                    number = ((string)value);
+                    peer = ((string)value);
                 }
             }
             catch (Exception e)
             {
                 return new ValidationResult(false, e.Message);
             }
-            if (number.Length < 11)
+            if (peer.Length < 5)
             {
-                return new ValidationResult(false, "RFC number must be 11 characters");
+                return new ValidationResult(false, "Peer name must be more than 5 characters");
             }
             else
             {
